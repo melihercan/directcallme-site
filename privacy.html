@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DirectCallMe Privacy Policy</title>
-<meta name="description" content="What DirectCallMe does with your data: it has no server, no account and no analytics, and a call goes directly between the two devices.">
+<meta name="description" content="What DirectCallMe does with your data: no account, no analytics, and every call goes directly between the two devices.">
 <style>
   :root {
     --bg: #ffffff;
@@ -46,12 +46,15 @@
 <body>
 <main>
   <h1>DirectCallMe Privacy Policy</h1>
-  <p class="meta">Effective 24 September 2026</p>
+  <p class="meta">Effective 6 November 2026</p>
 
   <div class="summary">
-    <p><strong>In short:</strong> DirectCallMe has no server, no account and no analytics. A call,
-    its chat and its files go directly between your device and the other person's device,
-    encrypted. The developer never receives your calls, your messages, your contacts or anything
+    <p><strong>In short:</strong> DirectCallMe has no server of its own, no account and no
+    analytics. A call, its chat and its files always go directly between your device and the
+    device of each person in the call, encrypted. On a network you trust, nothing else is involved at all. A
+    call by invitation is set up through outside services - the messenger you send the invitation
+    with, and a STUN server that tells your device its public address - which never carry the
+    call itself. The developer never receives your calls, your messages, your contacts or anything
     that identifies you, because the app has nowhere to send them.</p>
   </div>
 
@@ -68,38 +71,69 @@
   <ul>
     <li><strong>Your display name.</strong> By default this is your device's name (for example
       "Anna's iPhone"). You can change it in Settings.</li>
-    <li><strong>Your settings:</strong> low-data mode, LAN-only mode and the list of STUN or TURN
+    <li><strong>Your settings:</strong> low-data mode, LAN-only mode and the list of STUN
       servers.</li>
     <li><strong>The free-call counter</strong>, a single number. It is kept in the device's secure
       storage (the Keychain on Apple devices, which can keep it after the app is removed) so
       that reinstalling does not reset the trial.</li>
+    <li><strong>Your device key</strong>, made by the app the first time it runs and kept in the
+      device's secure storage. On a call it proves to the other device that it is talking to the
+      same device as last time. It never leaves your device; only its public half is sent, to the
+      person you call.</li>
+    <li><strong>People you chose to remember.</strong> After a call, if you tap "Codes match", the app
+      keeps the other person's display name and the public key of their device, so the next call
+      with them is recognised without comparing the code again. Nothing else is kept about them:
+      no number, no address, no call history. You can forget anyone at any time from the home
+      screen.</li>
+    <li><strong>The networks you trusted.</strong> For each network you said yes or no to, the app
+      keeps a scrambled value made from the Wi-Fi's name, or from the router's hardware address
+      where it has no Wi-Fi name to go by, such as on a cable. The value is keyed with a secret that
+      never leaves the device, so the list cannot be read back as network names, not even by us. It
+      is never sent anywhere.</li>
+    <li><strong>Who was on each trusted network.</strong> So that you find each other again quickly
+      after a restart, the app keeps, under that network's scrambled value, the display name, device
+      key and local network address of the people it saw there. It is never sent anywhere, and
+      nothing about when you met them or called them is kept.</li>
   </ul>
   <p>Nothing about a call is written to disk. A file you receive is kept only if you choose to
   save it, and then only where you save it.</p>
 
   <h2>What leaves your device, and to whom</h2>
   <ul>
-    <li><strong>To the person you call:</strong> your camera video, microphone audio, chat
-      messages, the files you choose to send and your display name. These travel directly
-      between the two devices and are encrypted with WebRTC's standard encryption (DTLS-SRTP),
+    <li><strong>To the people in your call:</strong> your camera video, microphone audio, chat
+      messages, the files you choose to send, your display name and your device's public key. These travel directly
+      between the devices and are encrypted with WebRTC's standard encryption (DTLS-SRTP),
       using keys that exist only for that call.</li>
+    <li><strong>In a group call</strong>, possible with up to four people on a network you trust, each
+      device connects directly to every other one, so everything above goes to each person in the
+      call. When someone is added, the people already in the call and the newcomer are told each
+      other's display name, device key and local network address, so that they can connect.</li>
     <li><strong>The invitation and the reply.</strong> To start a call, the two apps exchange a
       short code, shown as a QR code or shared as a link. It contains the network addresses
       your device can be reached at and the details needed to set up the encrypted connection.
       You choose how to hand it over. A QR code shown in person leaves no copy anywhere. A code
       sent through a messaging app stays in that app and on its servers, under that app's own
       privacy policy.</li>
-    <li><strong>To a STUN server</strong>, once per call: a request that lets your device learn its
-      own public network address, so that the other device can reach it. The server sees your
-      IP address and the time of the request, and nothing else. It learns nothing about who you
+    <li><strong>To devices on a network you trust.</strong> The first time you are on a network, the
+      app asks whether to make you visible there. Only on a network you said yes to does it announce
+      itself on that local network, with your display name, the fingerprint of your device's public
+      key and a random number that is new for every announcement, so that the people on it can see
+      you and ring you. The announcement never leaves the local network, and stops the moment you
+      leave it or tap Stop. A call made this way goes directly between the two devices over that
+      network and contacts no server, not even a STUN server. On any other network the app only
+      listens, and announces nothing.</li>
+    <li><strong>To a STUN server</strong>, while a call is being set up: a request that lets your
+      device learn its own public network address, so that the other device can reach it. While
+      an invitation waits for its reply, the request is repeated every 20 seconds so that the
+      reply can still find its way back. The server sees your IP address and the times of the
+      requests, and nothing else. It learns nothing about who you
       are calling. By default the app asks Google (<code>stun.l.google.com</code>) and Cloudflare
       (<code>stun.cloudflare.com</code>), whose handling of that request is covered by their own
       privacy policies. You can replace them with any server you prefer, or turn on LAN-only
       mode so that no request is sent at all.</li>
-    <li><strong>To a TURN server, only if you add one.</strong> The app uses none by default. If you
-      add one in Settings, and a direct connection cannot be made, the call is relayed through
-      that server. It stays encrypted, but the server can see both devices' IP addresses and how
-      much data passes through.</li>
+    <li><strong>Never to a relay.</strong> No call is ever passed through a server, ours or anyone
+      else's. If the two devices cannot reach each other directly, the call does not connect and
+      the app says so.</li>
     <li><strong>To your app store, for the one-time unlock.</strong> Purchases are handled entirely by
       Apple, Google or Microsoft. We never see your payment details. The app only asks the store
       whether this product has been bought on your store account.</li>
@@ -113,7 +147,19 @@
       code is read on your device.</li>
     <li><strong>Microphone</strong>: to send your voice.</li>
     <li><strong>Local network</strong> (Apple devices): to connect directly to a device on the same
-      network.</li>
+      network, and to find and announce to the people on it.</li>
+    <li><strong>Location</strong> (Android, iPhone, iPad, Windows): these systems give an app the
+      Wi-Fi's name only with this permission. The app reads the network's name to recognise a network
+      you trust, and the hardware address of the access point to tell a move within the same Wi-Fi
+      from a change of network, and nothing else. It never reads where you are. It asks only for
+      location while the app is in use, never for the background location permission. On Android
+      that use goes on with the app out of sight while it waits for a network you trust, always with
+      its notification showing. A Mac needs no such permission: it goes by the router's hardware
+      address.</li>
+    <li><strong>Notifications and running in the background</strong> (Android): while you are
+      visible on a trusted network, a notification shows that the app stays reachable, and an
+      incoming call is shown over the lock screen. The app asks Android to let it use the network
+      while the screen is off, so that a call can still arrive.</li>
   </ul>
   <p>The camera and microphone are used only during a call, or while you are scanning a QR code.</p>
 
@@ -130,8 +176,8 @@
   <p>Data protection laws such as the GDPR and Türkiye's KVKK give you the right to access,
   correct or delete personal data held about you. We hold none, so there is nothing for us to
   hand over or erase. To remove everything the app keeps on your device, delete the app. To
-  clear the free-call counter from an Apple device's Keychain as well, you can reset the
-  device. Questions are welcome at the address above.</p>
+  clear the free-call counter and the device key from an Apple device's Keychain as well, you
+  can reset the device. Questions are welcome at the address above.</p>
 
   <h2>Changes</h2>
   <p>If the app ever starts handling data differently, this page will be updated before that
